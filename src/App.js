@@ -1,7 +1,14 @@
 import React from "react";
 import styled from "styled-components/macro";
-import { GlobalStyles } from "./styles/global";
+import { GlobalStyles, colors } from "./styles/global";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  NavLink
+} from "react-router-dom";
 import ToDoList from "./components/ToDoList";
+import History from "./components/History";
 
 const MinWidth = styled.div`
   min-height: 100vh;
@@ -21,14 +28,41 @@ const AppHeading = styled.h1`
   font-size: 4rem;
 `;
 
+const Nav = styled.nav`
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-column-gap: 1rem;
+  .active {
+    color: ${colors.black};
+  }
+  padding-bottom: 2rem;
+`;
+
 function App() {
   return (
     <>
       <GlobalStyles />
       <MinWidth>
         <AppContainer>
-          <AppHeading>Another To Do List</AppHeading>
-          <ToDoList />
+          <Router>
+            <AppHeading>Another To Do List</AppHeading>
+            <Nav>
+              <NavLink to="/" activeClassName="active" exact>
+                List
+              </NavLink>
+              <NavLink to="/history" activeClassName="active" exact>
+                History
+              </NavLink>
+            </Nav>
+            <Switch>
+              <Route path="/history">
+                <History />
+              </Route>
+              <Route path="/">
+                <ToDoList />
+              </Route>
+            </Switch>
+          </Router>
         </AppContainer>
       </MinWidth>
     </>

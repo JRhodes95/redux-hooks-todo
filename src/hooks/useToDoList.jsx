@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
 
-const useToDoList = () => {
+const useToDoList = filter => {
   const [isSynced, setSynced] = useState(false);
   const [toDos, setToDos] = useState([]);
+
+  const filterByState = filter =>
+    filter ? toDos.filter(({ state }) => state === filter) : toDos;
 
   useEffect(() => {
     const fetchToDos = async () => {
@@ -36,7 +39,7 @@ const useToDoList = () => {
   const addToDo = async ({ info }) => {
     setSynced(false);
     const currentToDos = [...toDos];
-    const newToDo = { id: Date.now().toString(), info };
+    const newToDo = { id: Date.now().toString(), info, state: "ACTIVE" };
     currentToDos.push(newToDo);
     setToDos(currentToDos);
     await addToStore({ newToDo });
@@ -49,13 +52,13 @@ const useToDoList = () => {
       return toDo.id === id;
     });
     const newToDos = [...toDos];
-    newToDos.splice(indexToRemove, 1);
+    newToDos[indexToRemove].state = "INACTIVE";
     setToDos(newToDos);
     await removeFromStore({ id });
     setSynced(true);
   };
 
-  return { toDos, isSynced, addToDo, removeToDo };
+  return { toDos: filterByState(filter), isSynced, addToDo, removeToDo };
 };
 
 export default useToDoList;

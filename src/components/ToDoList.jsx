@@ -12,7 +12,7 @@ const ListContainer = styled.div`
 const SaveState = styled.div``;
 
 const ToDoList = () => {
-  const { toDos, isSynced, addToDo, removeToDo } = useToDoList();
+  const { toDos, isSynced, addToDo, removeToDo } = useToDoList("ACTIVE");
 
   return (
     <ListContainer>

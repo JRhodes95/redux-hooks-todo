@@ -47,7 +47,7 @@ const Submit = styled.input`
   }
 `;
 
-const ToDoInput = () => {
+const ToDoInput = ({ addToDo }) => {
   const [newToDo, setNewToDo] = useState("");
 
   const handleChange = event => {
@@ -55,8 +55,10 @@ const ToDoInput = () => {
   };
 
   const handleSubmit = event => {
-    alert(`Created ${newToDo}`);
+    addToDo({ info: newToDo });
+    setNewToDo("");
     event.preventDefault();
+    event.target.reset();
   };
 
   return (

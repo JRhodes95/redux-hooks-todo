@@ -36,15 +36,17 @@ const Button = styled.button`
 
 const Info = styled.div``;
 
-const ToDoItem = () => {
+const ToDoItem = ({ id, info, removeToDo }) => {
   const handleClick = event => {
-    alert("Setting item to done");
+    removeToDo({ id: event.target.id });
   };
 
   return (
     <ItemContainer>
-      <Button onClick={handleClick}>Done</Button>
-      <Info>To do item</Info>
+      <Button id={id} onClick={handleClick}>
+        Done
+      </Button>
+      <Info>{info}</Info>
     </ItemContainer>
   );
 };

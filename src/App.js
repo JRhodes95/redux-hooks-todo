@@ -30,10 +30,24 @@ const AppHeading = styled.h1`
 
 const Nav = styled.nav`
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
+  grid-template-columns: repeat(2, min-content);
   grid-column-gap: 1rem;
+  a {
+    font-size: 1.25rem;
+    text-decoration: none;
+    :link {
+      text-decoration: none;
+    }
+    :visited {
+      text-decoration: none;
+      color: ${colors.black};
+    }
+  }
+
   .active {
+    text-decoration: none;
     color: ${colors.black};
+    border-bottom: 2px solid ${colors.raspberry};
   }
   padding-bottom: 2rem;
 `;

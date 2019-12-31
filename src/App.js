@@ -14,6 +14,7 @@ const AppContainer = styled.div`
   height: 100%;
   width: 100%;
   grid-column: 2 / -2;
+  padding: 2rem;
 `;
 
 const AppHeading = styled.h1`

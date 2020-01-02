@@ -26,14 +26,12 @@ const useToDoList = filter => {
       },
       body: JSON.stringify(newToDo)
     });
-    console.log(await response.json());
   };
 
   const removeFromStore = async ({ id }) => {
     const response = await fetch(`http://localhost:3010/todos/${id}`, {
       method: "PUT"
     });
-    console.log(await response.json());
   };
 
   const addToDo = async ({ info }) => {

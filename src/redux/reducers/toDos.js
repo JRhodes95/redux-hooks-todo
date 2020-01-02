@@ -5,7 +5,8 @@ export default (state = intialState, action) => {
     case "POPULATE_INITIAL_TODOS":
       return action.payload;
     case "ADD_TODO":
-      console.log(action.type);
+      const newToDo = action.payload;
+      state.push(newToDo);
       return state;
     case "MARK_TODO_DONE":
       console.log(action.type);

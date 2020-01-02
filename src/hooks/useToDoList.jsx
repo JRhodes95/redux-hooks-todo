@@ -14,16 +14,28 @@ const useToDoList = filter => {
     dispatch({ type: "POPULATE_INITIAL_TODOS", payload: initialToDos });
     dispatch({ type: "SUCCESS" });
   };
+
   if (isSynced === "NOT_FETCHED") fetchToDos();
-  // const addToDo = async ({ info }) => {
-  //   setSynced(false);
-  //   const currentToDos = [...toDos];
-  //   const newToDo = { id: Date.now().toString(), info, state: "ACTIVE" };
-  //   currentToDos.push(newToDo);
-  //   setToDos(currentToDos);
-  //   await addToStore({ newToDo });
-  //   setSynced(true);
-  // };
+
+  const addToDo = async ({ info }) => {
+    dispatch({
+      type: "PENDING"
+    });
+    const newToDo = { id: Date.now().toString(), info, state: "ACTIVE" };
+    dispatch({ type: "ADD_TODO", payload: newToDo });
+    await addToStore({ newToDo });
+    dispatch({ type: "SUCCESS" });
+  };
+
+  const addToStore = async ({ newToDo }) => {
+    await fetch("http://localhost:3010/todos", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(newToDo)
+    });
+  };
 
   // const removeToDo = async ({ id }) => {
   //   setSynced(false);
@@ -37,19 +49,6 @@ const useToDoList = filter => {
   //   setSynced(true);
   // };
 
-  // const filterByState = filter =>
-  //   filter ? toDos.filter(({ state }) => state === filter) : toDos;
-
-  // const addToStore = async ({ newToDo }) => {
-  //   await fetch("http://localhost:3010/todos", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     },
-  //     body: JSON.stringify(newToDo)
-  //   });
-  // };
-
   // const removeFromStore = async ({ id }) => {
   //   await fetch(`http://localhost:3010/todos/${id}`, {
   //     method: "PUT"
@@ -57,9 +56,11 @@ const useToDoList = filter => {
   // };
 
   // return { toDos: filterByState(filter), isSynced, addToDo, removeToDo };
-  let addToDo, removeToDo;
+  let removeToDo;
 
-  return { toDos, isSynced, addToDo, removeToDo };
+  const filterByState = filter =>
+    filter ? toDos.filter(({ state }) => state === filter) : toDos;
+  return { toDos: filterByState(filter), isSynced, addToDo, removeToDo };
 };
 
 export default useToDoList;

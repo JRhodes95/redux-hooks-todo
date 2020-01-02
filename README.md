@@ -1,3 +1,9 @@
+Repo to accompany my brown-bag on state management in React with Hooks and Redux.
+
+Needs a simple API for the steps after the basic useState implementation.
+
+---
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

@@ -19,7 +19,7 @@ const useToDoList = filter => {
   }, []);
 
   const addToStore = async ({ newToDo }) => {
-    const response = await fetch("http://localhost:3010/todos", {
+    await fetch("http://localhost:3010/todos", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -29,7 +29,7 @@ const useToDoList = filter => {
   };
 
   const removeFromStore = async ({ id }) => {
-    const response = await fetch(`http://localhost:3010/todos/${id}`, {
+    await fetch(`http://localhost:3010/todos/${id}`, {
       method: "PUT"
     });
   };

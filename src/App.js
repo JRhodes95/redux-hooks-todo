@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components/macro";
+import { Provider } from "react-redux";
 import { GlobalStyles, colors } from "./styles/global";
 import {
   BrowserRouter as Router,
@@ -7,6 +8,7 @@ import {
   Route,
   NavLink
 } from "react-router-dom";
+import store from "./redux/store";
 import ToDoList from "./components/ToDoList";
 import History from "./components/History";
 
@@ -54,7 +56,7 @@ const Nav = styled.nav`
 
 function App() {
   return (
-    <>
+    <Provider store={store}>
       <GlobalStyles />
       <MinWidth>
         <AppContainer>
@@ -79,7 +81,7 @@ function App() {
           </Router>
         </AppContainer>
       </MinWidth>
-    </>
+    </Provider>
   );
 }
 

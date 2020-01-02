@@ -37,29 +37,22 @@ const useToDoList = filter => {
     });
   };
 
-  // const removeToDo = async ({ id }) => {
-  //   setSynced(false);
-  //   const indexToRemove = toDos.findIndex(toDo => {
-  //     return toDo.id === id;
-  //   });
-  //   const newToDos = [...toDos];
-  //   newToDos[indexToRemove].state = "INACTIVE";
-  //   setToDos(newToDos);
-  //   await removeFromStore({ id });
-  //   setSynced(true);
-  // };
+  const removeToDo = async ({ id }) => {
+    dispatch({ type: "PENDING" });
+    dispatch({ type: "REMOVE_TODO", payload: id });
+    await removeFromStore({ id });
+    dispatch({ type: "SUCCESS" });
+  };
 
-  // const removeFromStore = async ({ id }) => {
-  //   await fetch(`http://localhost:3010/todos/${id}`, {
-  //     method: "PUT"
-  //   });
-  // };
-
-  // return { toDos: filterByState(filter), isSynced, addToDo, removeToDo };
-  let removeToDo;
+  const removeFromStore = async ({ id }) => {
+    await fetch(`http://localhost:3010/todos/${id}`, {
+      method: "PUT"
+    });
+  };
 
   const filterByState = filter =>
     filter ? toDos.filter(({ state }) => state === filter) : toDos;
+
   return { toDos: filterByState(filter), isSynced, addToDo, removeToDo };
 };
 

@@ -8,8 +8,12 @@ export default (state = intialState, action) => {
       const newToDo = action.payload;
       state.push(newToDo);
       return state;
-    case "MARK_TODO_DONE":
-      console.log(action.type);
+    case "REMOVE_TODO":
+      const id = action.payload;
+      const indexToRemove = state.findIndex(toDo => {
+        return toDo.id === id;
+      });
+      state[indexToRemove].state = "INACTIVE";
       return state;
     default:
       return state;

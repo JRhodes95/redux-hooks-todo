@@ -1,22 +1,31 @@
-import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 const useToDoList = filter => {
-  const [isSynced, setSynced] = useState(false);
-  const [toDos, setToDos] = useState([]);
+  const { toDos, isSynced } = useSelector(state => state);
 
-  const filterByState = filter =>
-    filter ? toDos.filter(({ state }) => state === filter) : toDos;
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    const fetchToDos = async () => {
-      setSynced(false);
-      const response = await fetch("http://localhost:3010/todos");
-      const initialToDos = await response.json();
-      setToDos(initialToDos);
-      setSynced(true);
-    };
-    fetchToDos();
-  }, []);
+  const fetchToDos = async () => {
+    dispatch({
+      type: "PENDING"
+    });
+    const response = await fetch("http://localhost:3010/todos");
+    const initialToDos = await response.json();
+    dispatch({ type: "POPULATE_INITIAL_TODOS", payload: initialToDos });
+    dispatch({ type: "SUCCESS" });
+  };
+
+  if (isSynced === "NOT_FETCHED") fetchToDos();
+
+  const addToDo = async ({ info }) => {
+    dispatch({
+      type: "PENDING"
+    });
+    const newToDo = { id: Date.now().toString(), info, state: "ACTIVE" };
+    dispatch({ type: "ADD_TODO", payload: newToDo });
+    await addToStore({ newToDo });
+    dispatch({ type: "SUCCESS" });
+  };
 
   const addToStore = async ({ newToDo }) => {
     await fetch("http://localhost:3010/todos", {
@@ -28,33 +37,21 @@ const useToDoList = filter => {
     });
   };
 
+  const removeToDo = async ({ id }) => {
+    dispatch({ type: "PENDING" });
+    dispatch({ type: "REMOVE_TODO", payload: id });
+    await removeFromStore({ id });
+    dispatch({ type: "SUCCESS" });
+  };
+
   const removeFromStore = async ({ id }) => {
     await fetch(`http://localhost:3010/todos/${id}`, {
       method: "PUT"
     });
   };
 
-  const addToDo = async ({ info }) => {
-    setSynced(false);
-    const currentToDos = [...toDos];
-    const newToDo = { id: Date.now().toString(), info, state: "ACTIVE" };
-    currentToDos.push(newToDo);
-    setToDos(currentToDos);
-    await addToStore({ newToDo });
-    setSynced(true);
-  };
-
-  const removeToDo = async ({ id }) => {
-    setSynced(false);
-    const indexToRemove = toDos.findIndex(toDo => {
-      return toDo.id === id;
-    });
-    const newToDos = [...toDos];
-    newToDos[indexToRemove].state = "INACTIVE";
-    setToDos(newToDos);
-    await removeFromStore({ id });
-    setSynced(true);
-  };
+  const filterByState = filter =>
+    filter ? toDos.filter(({ state }) => state === filter) : toDos;
 
   return { toDos: filterByState(filter), isSynced, addToDo, removeToDo };
 };
